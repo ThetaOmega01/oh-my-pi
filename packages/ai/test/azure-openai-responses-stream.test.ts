@@ -5,6 +5,7 @@ import {
 } from "@oh-my-pi/pi-ai/providers/azure-openai-responses";
 import type { Context, FetchImpl, Model, ModelSpec, Tool } from "@oh-my-pi/pi-ai/types";
 import { buildModel } from "@oh-my-pi/pi-catalog/build";
+import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
 
 const azureModel: Model<"azure-openai-responses"> = buildModel({
 	id: "gpt-5-mini",
@@ -153,6 +154,20 @@ describe("azure openai responses streaming", () => {
 			{ role: "developer", content: "Second instruction" },
 			{ role: "user", content: [{ type: "input_text", text: "Say hello" }] },
 		]);
+	});
+
+	it("serializes an Azure GPT-5.6 pro alias as the base deployment with pro reasoning mode", async () => {
+		const model = getBundledModel<"azure-openai-responses">("azure", "gpt-5.6-sol-pro");
+		if (!model) throw new Error("Expected bundled azure/gpt-5.6-sol-pro model");
+
+		const payload = await captureAzurePayload(
+			{ messages: [{ role: "user", content: "Review this migration", timestamp: Date.now() }] },
+			model,
+			{ reasoning: "high", azureBaseUrl: azureModel.baseUrl },
+		);
+
+		expect(payload.model).toBe("gpt-5.6-sol");
+		expect(payload.reasoning).toMatchObject({ effort: "high", mode: "pro" });
 	});
 
 	it("keeps Azure Responses prompt_cache_key separate from Anthropic cache controls", async () => {

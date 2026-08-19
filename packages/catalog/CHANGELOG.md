@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added Azure OpenAI GPT-5.6 Luna, Sol, and Terra pro-reasoning aliases, projecting each from its base catalog row with the base deployment id and `reasoning.mode: "pro"` marker.
+
 ## [17.3.8] - 2026-08-19
 
 ### Added

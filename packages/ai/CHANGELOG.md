@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed Azure OpenAI Responses variants ignoring catalog `requestModelId` and `reasoningMode`, so GPT-5.6 pro aliases target the deployed base model and serialize `reasoning.mode: "pro"`.
+
 ## [17.3.8] - 2026-08-19
 
 ### Changed
